@@ -1,19 +1,13 @@
 package com.jasper.brewery.web.controller;
 
 import com.jasper.brewery.services.CustomerService;
-import com.jasper.brewery.web.model.BeerDto;
-import com.jasper.brewery.web.model.Customer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.jasper.brewery.web.model.CustomerDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -27,7 +21,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Customer> getCustomer(@PathVariable UUID customerId) {
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable UUID customerId) {
         return new ResponseEntity<>(customerService.getCustomerById(customerId), HttpStatus.OK);
     }
 
@@ -39,8 +33,8 @@ public class CustomerController {
 
 
     @PostMapping
-    public ResponseEntity postCustomer(@Valid @RequestBody Customer customer) {
-        Customer res = customerService.postCustomer(customer);
+    public ResponseEntity postCustomer(@Valid @RequestBody CustomerDto customerDto) {
+        CustomerDto res = customerService.postCustomer(customerDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + res.getId().toString());
         return new ResponseEntity(headers, HttpStatus.CREATED);
@@ -48,8 +42,8 @@ public class CustomerController {
 
     @PutMapping("/{customerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCustomer(@PathVariable("customerId") UUID customerId,@Valid @RequestBody Customer customer) {
-        customerService.updateCustomer(customerId, customer);
+    public void updateCustomer(@PathVariable("customerId") UUID customerId,@Valid @RequestBody CustomerDto customerDto) {
+        customerService.updateCustomer(customerId, customerDto);
     }
 
 
